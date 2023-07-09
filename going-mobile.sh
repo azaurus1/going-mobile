@@ -28,10 +28,14 @@ configure_tailscale() {
 install_k3s_first_server() {
     echo "Installing k3s as a server..."
     curl -sfL https://get.k3s.io | sh -s - server --cluster-init
+    #Open port 6443 in ufw
+    sudo ufw allow 6443/tcp
 }
 
 # Function to install k3s as a server
 install_k3s_server() {
+    #Open port 6443 in ufw
+    sudo ufw allow 6443/tcp
     read -p "Enter first k3s server url: " K3S_URL
     read -p "Enter first k3s server token: " K3S_TOKEN
     curl -sfL https://get.k3s.io | sh -s server --server $K3S_URL --token $K3S_TOKEN
@@ -39,6 +43,8 @@ install_k3s_server() {
 
 # Function to install k3s as an agent
 install_k3s_agent() {
+    #Open port 6443 in ufw
+    sudo ufw allow 6443/tcp
     echo "Installing k3s as an agent..."
     read -p "Enter first k3s server url: " K3S_URL
     read -p "Enter first k3s server token: " K3S_TOKEN
