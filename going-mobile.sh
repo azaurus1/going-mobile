@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Flow is as follows:
+# Connect to Headscale server
+# Instantiate a k3s server with the etcd server tailscale address
+# Get Key from the first server
+# Instantiate a k3s server with the etcd server tailscale address AND using key from first server
+# NOTE: Be certain to use the tailscale addresses for everything to be sure that nothing is leaked
+
+
+# TODO: Add functionality to initialise the headscale / etcd machine
+# TODO: Update to reflect using external etcd.
+
 # Function to install tailscale
 install_tailscale() {
     echo "Installing tailscale..."
