@@ -1,0 +1,5 @@
+code-server:
+  persistence:
+    config:
+      enabled: true
+      mountPath: /config

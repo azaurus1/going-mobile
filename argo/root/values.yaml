@@ -1,0 +1,8 @@
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/azaurus1/going-mobile
+    targetRevision: HEAD
+stacks:
+  - name: apps

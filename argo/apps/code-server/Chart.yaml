@@ -1,0 +1,7 @@
+apiVersion: v2
+name: code-server
+version: 0.0.0
+dependencies:
+  - name: code-server
+    version: 7.0.28
+    repository: https://charts.truecharts.org/
