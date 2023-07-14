@@ -47,12 +47,13 @@ install_k3s_server() {
 
 # Function to install k3s as an agent
 install_k3s_agent() {
+    # TODO: Update to use new external DB method
     #Open port 6443 in ufw
     sudo ufw allow 6443/tcp
     echo "Installing k3s as an agent..."
-    read -p "Enter first k3s server url: " K3S_URL
-    read -p "Enter first k3s server token: " K3S_TOKEN
-    curl -sfL https://get.k3s.io | K3S_URL=$K3S_URL K3S_TOKEN=$K3S_TOKEN sh -
+    read -p "Enter k3s server url (including port 6443): " K3S_URL
+    read -p "Enter k3s server token: " K3S_TOKEN
+    curl -sfL https://get.k3s.io | sh agent --token=$K3S_TOKEN --server=$K3S_URL 
 }
 
 # Function to install k3s as a server
@@ -71,7 +72,7 @@ setup_as_agent_node() {
 
 display_k3s_information() {
     echo "---------------------"
-    echo "  k3s information"
+    echo "   k3s information"
     echo "---------------------"
     hostname=$(hostname)
     tailscale_address=$(tailscale status --json | jq -r '.Self.DNSName')
@@ -117,6 +118,12 @@ install_etcd(){
     # TODO: Create a systemd config file
     # TODO: Enable systemd service
 
+
+}
+
+install_argo(){
+    kubectl create namespace argocd
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
 
 }
 
