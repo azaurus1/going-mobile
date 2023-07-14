@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Flow is as follows:
+# K3S Node Flow is as follows:
 # Connect to Headscale server
 # Instantiate a k3s server with the etcd server tailscale address
 # Get Key from the first server
@@ -8,9 +8,9 @@
 # NOTE: Be certain to use the tailscale addresses for everything to be sure that nothing is leaked
 
 
-# TODO: Add functionality to initialise the headscale / etcd machine
 # TODO: Update to reflect using external etcd.
 # TODO: Check for tailscale on run
+# TODO: Setup argo using argo folder
 
 # Function to install tailscale
 install_tailscale() {
@@ -108,6 +108,16 @@ install_headscale(){
 }
 install_etcd(){
     echo "Installing etcd..."
+    ETCD_VER=v3.4.27
+    # choose either URL
+    DOWNLOAD_URL=${https://github.com/etcd-io/etcd/releases/download}
+    sudo curl -L ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /usr/local/bin/etcd-${ETCD_VER}-linux-amd64.tar.gz
+    chmod +x /usr/local/bin/etcd-${ETCD_VER}-linux-amd64.tar.gz
+
+    # TODO: Create a systemd config file
+    # TODO: Enable systemd service
+
+
 }
 
 cluster_menu() {
@@ -140,7 +150,8 @@ headscale_server_menu() {
     echo "-----------------------------"
     echo "1. Install headscale"
     echo "2. Install etcd" 
-    echo "3. Back" 
+    echo "3. Install and configure tailscale"
+    echo "4. Back" 
     read -p "Enter your choice: " choice
     echo
 
@@ -151,7 +162,11 @@ headscale_server_menu() {
         2)
             install_etcd
             ;;
-        3)
+        2)
+            install_tailscale
+            configure_tailscale
+            ;;
+        4)
             echo
             display_menu
             ;;
