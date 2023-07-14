@@ -53,7 +53,7 @@ install_k3s_agent() {
     echo "Installing k3s as an agent..."
     read -p "Enter k3s server url (including port 6443): " K3S_URL
     read -p "Enter k3s server token: " K3S_TOKEN
-    curl -sfL https://get.k3s.io | sh agent --token=$K3S_TOKEN --server=$K3S_URL 
+    curl -sfL https://get.k3s.io | sh -s agent --token=$K3S_TOKEN --server=$K3S_URL 
 }
 
 # Function to install k3s as a server
