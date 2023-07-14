@@ -83,6 +83,33 @@ display_k3s_information() {
     cluster_menu
 }
 
+install_headscale(){
+    echo "Installing Headscale..."
+    read -p "Enter your headscale url: " $headscale_server_url
+
+    # open ports
+    sudo ufw allow 80/tcp
+    sudo ufw allow 443/tcp
+    sudo ufw allow 8080/tcp
+    sudo ufw allow 41641/udp
+    sudo ufw allow 3478/udp
+
+    # download headscale
+    sudo wget https://github.com/juanfont/headscale/releases/download/v0.22.3/headscale_0.22.3_linux_amd64 -O /usr/local/bin/headscale 
+    chmod +x /usr/local/bin/headscale
+    sudo mkdir /var/lib/headscale/
+    sudo touch /var/lib/headscale/db.sqlite
+    sudo mkdir -p /etc/Headscale
+    sudo touch /etc/headscale/config.yaml
+
+    # TODO: use sed to modify the config template
+
+
+}
+install_etcd(){
+    echo "Installing etcd..."
+}
+
 cluster_menu() {
     echo "---------------------"
     echo "    Cluster Menu"
@@ -107,6 +134,36 @@ cluster_menu() {
             ;;
     esac # Correct ending for case statement
 }
+headscale_server_menu() {
+    echo "-----------------------------"
+    echo "    Headscale + etcd Menu"
+    echo "-----------------------------"
+    echo "1. Install headscale"
+    echo "2. Install etcd" 
+    echo "3. Back" 
+    read -p "Enter your choice: " choice
+    echo
+
+    case $choice in
+        1)
+            install_headscale
+            ;;
+        2)
+            install_etcd
+            ;;
+        3)
+            echo
+            display_menu
+            ;;
+        *)
+            echo "Invalid choice. Please try again."
+            echo
+            cluster_menu
+            ;;
+    esac # Correct ending for case statement
+}
+
+
 
 
 # Function to display the menu
@@ -117,25 +174,29 @@ display_menu() {
     echo "---------------------"
     echo "  Going Mobile Menu"
     echo "---------------------"
-    echo "1. Install as server node"
-    echo "2. Install as agent node"
-    echo "3. Cluster menu"
-    echo "4. Quit"
+    echo "1. Install Headscale + etcd server"
+    echo "2. Install as server node"
+    echo "3. Install as agent node"
+    echo "4. Cluster menu"
+    echo "5. Quit"
 
     read -p "Enter your choice: " choice
     echo
 
     case $choice in
         1)
-            setup_as_server_node
+            headscale_server_menu
             ;;
         2)
-            setup_as_agent_node
+            setup_as_server_node
             ;;
         3)
-            cluster_menu
+            setup_as_agent_node
             ;;
         4)
+            cluster_menu
+            ;;
+        5)
             echo "Quitting..."
             exit
             ;;

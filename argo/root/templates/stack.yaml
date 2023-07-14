@@ -11,7 +11,7 @@ spec:
       repoURL: https://github.com/azaurus1/homelab
       revision: HEAD
       directories:
-      - path: argo/apps/{{$stack.name}}/*
+      - path: argo/{{$stack.name}}/*
   template:
     metadata:
       name: '{{`{{path.basename}}`}}'
