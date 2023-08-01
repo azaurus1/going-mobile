@@ -11,6 +11,9 @@
 # TODO: Update to reflect using external etcd.
 # TODO: Check for tailscale on run
 # TODO: Setup argo using argo folder
+# TODO: Taint master nodes to no schedule so no workloads are run on them
+# TODO: Investigate using just Helm instead of Argo
+# TODO: Anti-Affinity for apps
 
 # Function to install tailscale
 install_tailscale() {
@@ -38,6 +41,9 @@ configure_tailscale() {
 
 # Function to install k3s as a server
 install_k3s_server() {
+
+    # TODO: Update to include --advertise-address=[tailscale ip address] otherwise agents joining on the server address cant figure it out
+
     #Open port 6443 in ufw
     sudo ufw allow 6443/tcp
     read -p "Enter first k3s server token: " K3S_TOKEN
