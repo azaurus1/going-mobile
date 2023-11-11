@@ -193,7 +193,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/azaurus1/going-mobile](https://github.com/azaurus1/going-mobile)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
