@@ -135,7 +135,9 @@ install_etcd(){
     chmod +x /usr/local/bin/etcd-${ETCD_VER}-linux-amd64.tar.gz
 
     # TODO: Create a systemd config file
+    wget -O /etc/systemd/system/ https://raw.githubusercontent.com/azaurus1/going-mobile/main/systemd/etcd.service
     # TODO: Enable systemd service
+    systemctl enable etcd.service
 
 
 }
