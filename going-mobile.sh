@@ -8,8 +8,6 @@
 # NOTE: Be certain to use the tailscale addresses for everything to be sure that nothing is leaked
 
 
-# TODO: Update to reflect using external etcd.
-# TODO: Check for tailscale on run
 # TODO: Setup argo using argo folder
 # TODO: Taint master nodes to no schedule so no workloads are run on them
 # TODO: Investigate using just Helm instead of Argo
@@ -17,9 +15,13 @@
 
 # Function to install tailscale
 install_tailscale() {
-    echo "Installing tailscale..."
-    # install using tailscale install script
-    curl -fsSL https://tailscale.com/install.sh | sh
+    if ! test -f /usr/bin/tailscale; then
+        echo "Installing tailscale..."
+        # install using tailscale install script
+        curl -fsSL https://tailscale.com/install.sh | sh
+    else
+        echo "Tailscale already installed, skipping.."
+    fi
 }
 
 # Function to configure tailscale
@@ -42,19 +44,30 @@ configure_tailscale() {
 # Function to install k3s as a server
 install_k3s_server() {
 
-    # TODO: Update to include --advertise-address=[tailscale ip address] otherwise agents joining on the server address cant figure it out
+    # Capture the tailscale ip output into the address variable
+    address=$(tailscale ip | head -n 1)
 
-    #Open port 6443 in ufw
+    # Open port 6443 in ufw
     sudo ufw allow 6443/tcp
     read -p "Enter first k3s server token: " K3S_TOKEN
     read -p "Enter etcd url (including port 2379): " ETCD_URL
-    curl -sfL https://get.k3s.io | sh -s server --token=$K3S_TOKEN --datastore-endpoint=$ETCD_URL
+    curl -sfL https://get.k3s.io | sh -s server --token="$K3S_TOKEN" --datastore-endpoint="$ETCD_URL" --advertise-address="$address"
+
+    if [ -z ${K3S_TOKEN+x} ]; 
+    then
+        server_token=$(cat /var/lib/rancher/k3s/server/token)
+        agent_token=$(cat /var/lib/rancher/k3s/server/token)
+        echo "==========================="
+        echo "K3S Server Token: $server_token"
+        echo "K3S Server Token: $server_token"
+    else 
+        echo "Node has joined cluster as server.."
+    fi
 }
+
 
 # Function to install k3s as an agent
 install_k3s_agent() {
-    # TODO: Update to use new external DB method
-    #Open port 6443 in ufw
     sudo ufw allow 6443/tcp
     echo "Installing k3s as an agent..."
     read -p "Enter k3s server url (including port 6443): " K3S_URL
@@ -124,12 +137,6 @@ install_etcd(){
     # TODO: Create a systemd config file
     # TODO: Enable systemd service
 
-
-}
-
-install_argo(){
-    kubectl create namespace argocd
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
 
 }
 

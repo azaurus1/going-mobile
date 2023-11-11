@@ -1,0 +1,8 @@
+[Unit]
+Description=etcd - distributed key-value store
+
+[Service]
+ExecStart=etcd -config-file /etc/etcd.conf.yml
+
+[Install]
+WantedBy=default.target
