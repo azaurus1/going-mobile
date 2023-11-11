@@ -7,8 +7,6 @@
 # Instantiate a k3s server with the etcd server tailscale address AND using key from first server
 # NOTE: Be certain to use the tailscale addresses for everything to be sure that nothing is leaked
 
-
-# TODO: Setup argo using argo folder
 # TODO: Taint master nodes to no schedule so no workloads are run on them
 # TODO: Investigate using just Helm instead of Argo
 # TODO: Anti-Affinity for apps
@@ -134,11 +132,10 @@ install_etcd(){
     sudo curl -L ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /usr/local/bin/etcd-${ETCD_VER}-linux-amd64.tar.gz
     chmod +x /usr/local/bin/etcd-${ETCD_VER}-linux-amd64.tar.gz
 
-    # TODO: Create a systemd config file
+    #Create a systemd config file
     wget -O /etc/systemd/system/ https://raw.githubusercontent.com/azaurus1/going-mobile/main/systemd/etcd.service
-    # TODO: Enable systemd service
+    #Enable systemd service
     systemctl enable etcd.service
-
 
 }
 
