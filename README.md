@@ -111,7 +111,7 @@ Follow these steps to deploy a Going Mobile instance.
 
 To deploy a bare minimum Going Mobile instance the following are required:
 
-- 2 x Machines with 1GB (Headscale + etcd Node, HAProxy Node)
+- 2 x Machines with 1GB RAM (Headscale + etcd Node, HAProxy Node)
 - 2 x Machines with 2GB RAM (Server Nodes)
 - 3 x Machines (Agent Nodes)
 
