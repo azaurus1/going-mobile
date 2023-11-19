@@ -49,7 +49,8 @@ install_k3s_server() {
     sudo ufw allow 6443/tcp
     read -p "Enter first k3s server token: " K3S_TOKEN
     read -p "Enter etcd url (including port 2379): " ETCD_URL
-    curl -sfL https://get.k3s.io | sh -s server --token="$K3S_TOKEN" --datastore-endpoint="$ETCD_URL" --advertise-address="$address"
+    read -p "Enter comma-separated list of tls to be added to tls-san: " TLS_SAN
+    curl -sfL https://get.k3s.io | sh -s server --token="$K3S_TOKEN" --datastore-endpoint="$ETCD_URL" --advertise-address="$address" --tls-san "$TLS_SAN"
 
     if [ -z ${K3S_TOKEN+x} ]; 
     then
@@ -57,7 +58,7 @@ install_k3s_server() {
         agent_token=$(cat /var/lib/rancher/k3s/server/token)
         echo "==========================="
         echo "K3S Server Token: $server_token"
-        echo "K3S Server Token: $server_token"
+        echo "K3S Agent Token: $server_token"
     else 
         echo "Node has joined cluster as server.."
     fi
